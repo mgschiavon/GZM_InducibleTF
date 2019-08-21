@@ -73,12 +73,12 @@ function [] = FN_FitMRW(X,H,p,D,s,f,I,ExID)
         % Save progress:
         if(mod(j,10000)==0)
             j0 = j + 1
-            save('TEMP_MRW.mat','mrw','j0','r');
+            save('TEMP_MRW.mat','mrw','j0','r','p');
         end
     end
-    clear j myP myE
+    clear j i myE
 
     % (4) Save:
-    save(cat(2,'MRW_',ExID,'_s',num2str(s),'.mat'),'mrw');
+    save(cat(2,'MRW_',ExID,'_s',num2str(s),'.mat'),'mrw','p');
     delete('TEMP_MRW.mat');
 end
