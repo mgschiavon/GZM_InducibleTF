@@ -11,14 +11,14 @@
 %   X : Vector (array) of TF concentration
 %   H : Vector of inducer (hormone) concentration
 %   p : Structure with the kinetic parameters
-%    .mY : 
-%    .kb : 
-%    .nO : 
-%    .KO : 
-%    .KX : 
-%    .aX : 
-%    .Im : 
-%    .gY :
+%    .mY : Related to basal synthesis of the naked promoter ([0,1])
+%    .kb : Related to efficiency rate of the transcription factor
+%    .nO : Promoter occupancy nonlinearity (Hill coefficient)
+%    .KO : Related to TF-promoter dissociation rate ([nM])
+%    .KX : Related to Hormone-TF (X:H) dissociation rate ([nM])
+%    .aX : Related to basal activity of free (non-active) TF ([0,1])
+%    .Im : Maximum synthesis rate given the gene & translocation rate
+%    .gY : Degradation/dilution rate of the output ([1/min])
 %   D : Measured output (data) matrix [length(H) x length(X)]
 %   s : Random number generator seed
 %   f : Structure (array) with information to fit parameters
