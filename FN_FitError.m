@@ -31,5 +31,5 @@
 
 function Ef = FN_FitError(X,H,p,D)
     Ye = FN_SS_Mechanistic(X,H,p);
-    Ef = sum(sum((D-Ye).^2)./(2*var(D)));
+    Ef = sum(sum((log10(D)-log10(Ye)).^2)./(2*var(log10(D))));
 end
