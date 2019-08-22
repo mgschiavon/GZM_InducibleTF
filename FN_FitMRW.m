@@ -7,7 +7,7 @@
 
 % FN_FitMRW : Find the set of parameters that best fit the data.
 %
-%   [] = FN_FitMRW(X,H,p,D,s,fp,ExID)
+%   [] = FN_FitMRW(X,H,p,D,s,fp,ExID,printAll)
 %   X : Vector (array) of TF concentration
 %   H : Vector of inducer (hormone) concentration
 %   p : Structure with the kinetic parameters
@@ -27,15 +27,17 @@
 %    .lim : Range of acceptable values (e.g. [0,1])
 %   I : Number of iterations
 %   ExID : Code for output file name
+%   printAll : Flag for printing full random walk
 %
-%   OUTPUT Ef : Sum of square errors
+%   OUTPUT bestP : Array of the best set of parameters
+%          minE  : Error of the best set of parameters
 %
 %   See also FN_SS_SimpleHill.m
 %   See also FN_SS_HillxBasal.m
 %   See also FN_SS_Mechanistic.m
 %   See also FN_FitError.m
 
-function [] = FN_FitMRW(X,H,p,D,s,f,I,ExID)
+function [bestP,minE] = FN_FitMRW(X,H,p,D,s,f,I,ExID,printAll)
     mrw.s = s;
     mrw.f = f;
     mrw.P = zeros(I,length(f));     % OUTPUT: Parameters.
@@ -71,7 +73,7 @@ function [] = FN_FitMRW(X,H,p,D,s,f,I,ExID)
             mrw.e(j) = myE;
         end
         % Save progress:
-        if(mod(j,10000)==0)
+        if(printAll && (mod(j,10000)==0))
             j0 = j + 1
             save('TEMP_MRW.mat','mrw','j0','r','p');
         end
@@ -79,6 +81,12 @@ function [] = FN_FitMRW(X,H,p,D,s,f,I,ExID)
     clear j i myE
 
     % (4) Save:
-    save(cat(2,'MRW_',ExID,'_s',num2str(s),'.mat'),'mrw','p');
-    delete('TEMP_MRW.mat');
+    if(printAll)
+        save(cat(2,'MRW_',ExID,'_s',num2str(s),'.mat'),'mrw','p');
+        delete('TEMP_MRW.mat');
+    end
+    [a b] = min(mrw.e);
+    bestP = mrw.P(b,:);
+    minE  = a;
+    clear a b
 end

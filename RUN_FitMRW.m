@@ -21,8 +21,9 @@ ExID = 'GEMc';	% Experiment (TF) to consider
     H = xd.(ExID).H;
     D = xd.(ExID).Y;
     clear xd
-S = [1:10];     % Random number seed(s) (1 per run)
-I = 100000;     % Iterations per fitting run
+S = [1:1000];     % Random number seed(s) (1 per run)
+I = 20000;      % Iterations per fitting run
+printAll = 0;   % Flag for printing full random walk
 % Kinetic parameters:
     p.mY = 0.997;
     p.kb = 0.6;
@@ -64,73 +65,78 @@ I = 100000;     % Iterations per fitting run
     clear i
 
 %% Run fitting:
+bestP = zeros(length(S),length(f));
+minE  = zeros(length(S),1);
 for s = S
     cat(2,'Running seed #',num2str(s))
-    FN_FitMRW(X,H,p,D,s,f,I,ExID)
+    [bP,mE] = FN_FitMRW(X,H,p,D,s,f,I,ExID,printAll)
+    bestP(s,:) = bP;
+    minE(s) = mE;
 end
-clear s
+clear s bP mE
+save(cat(2,'MRW_',ExID,'.mat'));
 
 %% Figures
-bestP = zeros(length(S),length(f));
-
-fig = figure();
-fig.Units = 'inches';
-fig.PaperPosition = [1 0 18 10];
-fig.Position = fig.PaperPosition;
-C = colormap('parula');
-for s = S
-    load(cat(2,'MRW_',ExID,'_s',num2str(s),'.mat'),'mrw');
-    	[a b] = min(mrw.e);
-    bestP(s,:) = mrw.P(b,:);
-    for i = 1:size(mrw.P,2)
-        subplot(2,4,i)
+if(printAll)
+    fig = figure();
+    fig.Units = 'inches';
+    fig.PaperPosition = [1 0 18 10];
+    fig.Position = fig.PaperPosition;
+    C = colormap('parula');
+    for s = S
+        load(cat(2,'MRW_',ExID,'_s',num2str(s),'.mat'),'mrw');
+            [a b] = min(mrw.e);
+        bestP(s,:) = mrw.P(b,:);
+        for i = 1:size(mrw.P,2)
+            subplot(2,4,i)
+            hold on;
+            plot(mrw.P(:,i),'LineWidth',2,'Color',C(s*6,:))
+                xlabel('Iterations')
+                ylabel(f(i).par)
+                xlim([0,I])
+                set(gca,'YScale','log')
+                box on
+        end
+        subplot(2,4,8)
         hold on;
-        plot(mrw.P(:,i),'LineWidth',2,'Color',C(s*6,:))
+        plot(mrw.e,'LineWidth',2,'Color',C(s*6,:))
             xlabel('Iterations')
-            ylabel(f(i).par)
+            ylabel('Error')
             xlim([0,I])
             set(gca,'YScale','log')
             box on
     end
-    subplot(2,4,8)
-    hold on;
-    plot(mrw.e,'LineWidth',2,'Color',C(s*6,:))
-        xlabel('Iterations')
-        ylabel('Error')
-        xlim([0,I])
-        set(gca,'YScale','log')
-        box on
-end
-clear s i a b
-print(gcf,cat(2,'MRW_',ExID,'_Runs.png'),'-dpng','-r300')
+    clear s i a b
+    print(gcf,cat(2,'MRW_',ExID,'_Runs.png'),'-dpng','-r300')
 
-fig = figure();
-fig.Units = 'inches';
-fig.PaperPosition = [0 0 18 8];
-fig.Position = fig.PaperPosition;
-C = colormap('jet');
-Hi = log2(H); Hi(length(H)) = Hi(length(Hi)-1) - 1;
-for s = S
-    for i = 1:length(f)
-        p.(f(i).par) = bestP(s,i);
+    fig = figure();
+    fig.Units = 'inches';
+    fig.PaperPosition = [0 0 18 8];
+    fig.Position = fig.PaperPosition;
+    C = colormap('jet');
+    Hi = log2(H); Hi(length(H)) = Hi(length(Hi)-1) - 1;
+    for s = S
+        for i = 1:length(f)
+            p.(f(i).par) = bestP(s,i);
+        end
+        Ye = FN_SS_Mechanistic(X,H,p);
+        subplot(2,5,s)
+        hold on
+        for i = 1:length(X)
+            plot(Hi,Ye(:,i),'Color',C(i*10,:),'LineWidth',2)
+            plot(Hi,D(:,i),'Color',C(i*10,:),'LineStyle','none','Marker','o')
+        end
+                xlabel('Hormone')
+                ylabel('Output')
+                title(cat(2,'Error = ',num2str(FN_FitError(X,H,p,D))))
+                xlim([min(Hi)-0.5 max(Hi)+0.5])
+                set(gca,'YScale','log','YGrid','on',...
+                    'XTick',Hi([length(H):-3:1]),'XTickLabel',H([length(H):-3:1]),...
+                    'XTickLabelRotation',45)
+                box on
     end
-    Ye = FN_SS_Mechanistic(X,H,p);
-    subplot(2,5,s)
-    hold on
-    for i = 1:length(X)
-        plot(Hi,Ye(:,i),'Color',C(i*10,:),'LineWidth',2)
-        plot(Hi,D(:,i),'Color',C(i*10,:),'LineStyle','none','Marker','o')
-    end
-            xlabel('Hormone')
-            ylabel('Output')
-            title(cat(2,'Error = ',num2str(FN_FitError(X,H,p,D))))
-            xlim([min(Hi)-0.5 max(Hi)+0.5])
-            set(gca,'YScale','log','YGrid','on',...
-                'XTick',Hi([length(H):-3:1]),'XTickLabel',H([length(H):-3:1]),...
-                'XTickLabelRotation',45)
-            box on
+    clear Hi s i 
+    print(gcf,cat(2,'MRW_',ExID,'_BestFits.png'),'-dpng','-r300')
 end
-clear Hi s i 
-print(gcf,cat(2,'MRW_',ExID,'_BestFits.png'),'-dpng','-r300')
 
 %% END
