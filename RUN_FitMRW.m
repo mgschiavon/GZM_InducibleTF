@@ -72,6 +72,9 @@ for s = S
     [bP,mE] = FN_FitMRW(X,H,p,D,s,f,I,ExID,printAll)
     bestP(s,:) = bP;
     minE(s) = mE;
+    if(mod(s,10)==0)
+        save('TEMP_MRWs.mat');
+    end
 end
 clear s bP mE
 save(cat(2,'MRW_',ExID,'.mat'));
@@ -85,8 +88,6 @@ if(printAll)
     C = colormap('parula');
     for s = S
         load(cat(2,'MRW_',ExID,'_s',num2str(s),'.mat'),'mrw');
-            [a b] = min(mrw.e);
-        bestP(s,:) = mrw.P(b,:);
         for i = 1:size(mrw.P,2)
             subplot(2,4,i)
             hold on;
