@@ -76,8 +76,9 @@ for s = S
         save('TEMP_MRWs.mat');
     end
 end
-clear s bP mE
+clear s bP mE ans
 save(cat(2,'MRW_',ExID,'.mat'));
+% load(cat(2,'MRW_',ExID,'.mat'));
 
 %% Figures
 if(printAll)
@@ -109,19 +110,59 @@ if(printAll)
     end
     clear s i a b
     print(gcf,cat(2,'MRW_',ExID,'_Runs.png'),'-dpng','-r300')
-
+else
+    fig = figure();
+    fig.Units = 'inches';
+    fig.PaperPosition = [0 0 5 8];
+    fig.Position = fig.PaperPosition;
+    
+    hist(log10(minE),20)
+        xlabel('log_{10}(min(error))')
+        ylabel('Count')
+        title(cat(2,'Experiment: ',ExID))
+        box on
+        
+        axes('Position',[0.25 0.5 0.3 0.3])
+            hist(log10(minE([minE<10])),20)
+            xlabel('log_{10}(min(error))')
+            ylabel('Count')
+            title(cat(2,'min(min(error)) = ',num2str(min(minE))))
+            box on
+        print(gcf,cat(2,'MRW_',ExID,'_minE.png'),'-dpng','-r300')
+        
+    fig = figure();
+    fig.Units = 'inches';
+    fig.PaperPosition = [0 0 18 8];
+    fig.Position = fig.PaperPosition;
+    [a b] = sort(minE);
+    for i = 1:length(f)
+        subplot(2,ceil(length(f)/2),i)
+        hold on;
+            scatter(minE,bestP(:,i))
+            for ii = 1:5
+                scatter(a(ii),bestP(b(ii),i),'filled')
+            end
+                ylabel(f(i).par)
+                xlabel('min(error)')
+                set(gca,'XScale','log')
+                box on
+                grid on
+    end
+        print(gcf,cat(2,'MRW_',ExID,'_minExPar.png'),'-dpng','-r300')
+end
     fig = figure();
     fig.Units = 'inches';
     fig.PaperPosition = [0 0 18 8];
     fig.Position = fig.PaperPosition;
     C = colormap('jet');
     Hi = log2(H); Hi(length(H)) = Hi(length(Hi)-1) - 1;
-    for s = S
+    [a b] = sort(minE);
+    for ii = 1:10
         for i = 1:length(f)
-            p.(f(i).par) = bestP(s,i);
+            p.(f(i).par) = bestP(b(ii),i);
         end
         Ye = FN_SS_Mechanistic(X,H,p);
-        subplot(2,5,s)
+        subplot(2,5,ii)
         hold on
         for i = 1:length(X)
             plot(Hi,Ye(:,i),'Color',C(i*10,:),'LineWidth',2)
@@ -138,6 +179,5 @@ if(printAll)
     end
     clear Hi s i 
     print(gcf,cat(2,'MRW_',ExID,'_BestFits.png'),'-dpng','-r300')
-end
 
 %% END
