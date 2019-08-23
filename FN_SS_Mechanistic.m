@@ -40,6 +40,7 @@ function Ye = FN_SS_Mechanistic(X,H,p)
             Xa = Xa([Xa<XT]);
             if(length(Xa)~=1)
                 'error -- multiple solutions'
+                Xa = NaN;
             end
             Xo = OHFn(Xa+(p.aX*(XT-Xa)),p.nO,p.KO,0);
             Ye(h,i) = OImx(Xo,p.Im,p.kb,p.mY)/p.gY;
