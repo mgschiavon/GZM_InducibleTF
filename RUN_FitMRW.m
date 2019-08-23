@@ -36,32 +36,32 @@ printAll = 0;   % Flag for printing full random walk
 % Parameters to fit:
     i = 1;
     f(i).par = 'mY';
-    f(i).cov = 1e-5;
-    f(i).lim = [0,1];
+    f(i).cov = 1e-2;
+    f(i).lim = [0.8,1];
     i = i + 1;
     f(i).par = 'kB';
-    f(i).cov = 1e-4;
-    f(i).lim = [0,10];
+    f(i).cov = 1e-2;
+    f(i).lim = [1e-5,10];
     i = i + 1;
     f(i).par = 'nO';
-    f(i).cov = 1e-4;
-    f(i).lim = [1,10];
+    f(i).cov = 1e-2;
+    f(i).lim = [1e-5,10];
     i = i + 1;
     f(i).par = 'KO';
-    f(i).cov = 1e-3;
-    f(i).lim = [0,100];
+    f(i).cov = 1e-2;
+    f(i).lim = [1e-4,100];
     i = i + 1;
     f(i).par = 'KX';
-    f(i).cov = 1e-3;
-    f(i).lim = [0,100];
+    f(i).cov = 1e-2;
+    f(i).lim = [1e-4,100];
     i = i + 1;
     f(i).par = 'aX';
-    f(i).cov = 1e-6;
-    f(i).lim = [0,0.2];
+    f(i).cov = 1e-2;
+    f(i).lim = [2e-7,0.2];
     i = i + 1;
     f(i).par = 'Im';
-    f(i).cov = 1e-4;
-    f(i).lim = [0,2];
+    f(i).cov = 1e-2;
+    f(i).lim = [2e-6,2];
     clear i
 
 %% Run fitting:
