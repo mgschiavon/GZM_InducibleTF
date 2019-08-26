@@ -27,10 +27,10 @@ if(iARG.an=="ExSSs")
 		writedlm(io, [vcat("HT","XT0",[string(i) for i in mm.myODE.syms])],'\t');
 		HT = 10 .^ collect(-3:0.1:3);
         for i in 1:length(HT)
-			XT0 = 0.01*p[:iM]/p[:gY];
+			XT0 = 0.04;
             ssR = fn.SS(mm.myODE, p, [XT0 0 HT[i]], 1e-6);
             writedlm(io, [hcat(HT[i],XT0,ssR)],'\t');
-			XT0 = p[:iM]/p[:gY];
+			XT0 = 4;
             ssR = fn.SS(mm.myODE, p, [XT0 0 HT[i]], 1e-6);
             writedlm(io, [hcat(HT[i],XT0,ssR)],'\t');
         end
