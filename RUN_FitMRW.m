@@ -19,7 +19,7 @@ ExID = 'GEMc';	% Experiment (TF) to consider
     load('DATA_synTF.mat','xd');
     X = mean(xd.(ExID).X,1)*10;
     H = xd.(ExID).H;
-    D = xd.(ExID).Y;
+    D = xd.(ExID).Y*10;
     clear xd
 S = [1:1000];     % Random number seed(s) (1 per run)
 I = 20000;      % Iterations per fitting run
@@ -31,37 +31,37 @@ printAll = 0;   % Flag for printing full random walk
     p.KO = 0.99;
     p.KX = 15;
     p.aX = 0.00065;
-    p.Im = 0.6;
     p.gY = 0.01;
+    p.Im = max(max(D))*p.gY;
 % Parameters to fit:
     i = 1;
     f(i).par = 'mY';
-    f(i).cov = 1e-2;
+    f(i).cov = 0.1;
     f(i).lim = [0.8,1];
     i = i + 1;
     f(i).par = 'kB';
-    f(i).cov = 1e-2;
-    f(i).lim = [1e-5,10];
+    f(i).cov = 0.1;
+    f(i).lim = [2e-6,2];
     i = i + 1;
     f(i).par = 'nO';
-    f(i).cov = 1e-2;
+    f(i).cov = 0.1;
     f(i).lim = [1e-5,10];
     i = i + 1;
     f(i).par = 'KO';
-    f(i).cov = 1e-2;
+    f(i).cov = 0.1;
     f(i).lim = [1e-4,100];
     i = i + 1;
     f(i).par = 'KX';
-    f(i).cov = 1e-2;
+    f(i).cov = 0.1;
     f(i).lim = [1e-4,100];
     i = i + 1;
     f(i).par = 'aX';
-    f(i).cov = 1e-2;
+    f(i).cov = 0.1;
     f(i).lim = [2e-7,0.2];
-    i = i + 1;
-    f(i).par = 'Im';
-    f(i).cov = 1e-2;
-    f(i).lim = [2e-6,2];
+%     i = i + 1;
+%     f(i).par = 'Im';
+%     f(i).cov = 0.1;
+%     f(i).lim = [2e-6,2];
     clear i
 
 %% Run fitting:
