@@ -78,6 +78,7 @@ for s = S
 end
 clear s bP mE ans
 save(cat(2,'MRW_',ExID,'.mat'));
+delete('TEMP_MRWs.mat');
 % load(cat(2,'MRW_',ExID,'.mat'));
 
 %% Figures
