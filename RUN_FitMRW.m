@@ -14,6 +14,8 @@
 clear
 
 %% Inputs & conditions
+% Transcriptional model:
+M = 'Mechanistic';
 % Data
 ExID = 'GEMc';	% Experiment (TF) to consider
     load('DATA_synTF.mat','xd');
@@ -75,17 +77,17 @@ bestP = zeros(length(S),length(f));
 minE  = zeros(length(S),1);
 for s = S
     cat(2,'Running seed #',num2str(s))
-    [bP,mE] = FN_FitMRW(X,H,p,D,s,f,I,ExID,printAll)
+    [bP,mE] = FN_FitMRW(X,H,p,M,D,s,f,I,ExID,printAll)
     bestP(s,:) = bP;
     minE(s) = mE;
     if(mod(s,10)==0)
-        save(cat(2,'TEMP_MRW_',ExID,'.mat'));
+        save(cat(2,'TEMP_MRW_',M,'_',ExID,'.mat'));
     end
 end
 clear s bP mE ans
-save(cat(2,'MRW_',ExID,'.mat'));
-delete(cat(2,'TEMP_MRW_',ExID,'.mat'));
-% load(cat(2,'MRW_',ExID,'.mat'));
+save(cat(2,'MRW_',M,'_',ExID,'.mat'));
+delete(cat(2,'TEMP_MRW_',M,'_',ExID,'.mat'));
+% load(cat(2,'MRW_',M,'_',ExID,'.mat'));
 
 %% Figures
 if(printAll)
@@ -95,7 +97,7 @@ if(printAll)
     fig.Position = fig.PaperPosition;
     C = colormap('parula');
     for s = S
-        load(cat(2,'MRW_',ExID,'_s',num2str(s),'.mat'),'mrw');
+        load(cat(2,'MRW_',M,'_',ExID,'_s',num2str(s),'.mat'),'mrw');
         for i = 1:size(mrw.P,2)
             subplot(2,4,i)
             hold on;
@@ -177,7 +179,7 @@ end
         end
                 xlabel('Hormone')
                 ylabel('Output')
-                title(cat(2,'Error = ',num2str(FN_FitError(X*p.nM,H,p,D*p.nM))))
+                title(cat(2,'Error = ',num2str(FN_FitError(X*p.nM,H,p,M,D*p.nM))))
                 xlim([min(Hi)-0.5 max(Hi)+0.5])
                 set(gca,'YScale','log','YGrid','on',...
                     'XTick',Hi([length(H):-3:1]),'XTickLabel',H([length(H):-3:1]),...
@@ -185,6 +187,6 @@ end
                 box on
     end
     clear Hi s i 
-    print(gcf,cat(2,'MRW_',ExID,'_BestFits.png'),'-dpng','-r300')
+    print(gcf,cat(2,'MRW_',M,'_',ExID,'_BestFits.png'),'-dpng','-r300')
 
 %% END

@@ -7,19 +7,12 @@
 
 % FN_FitMRW : Find the set of parameters that best fit the data.
 %
-%   [] = FN_FitMRW(X,H,p,D,s,fp,ExID,printAll)
+%   [] = FN_FitMRW(X,H,p,M,D,s,fp,ExID,printAll)
 %   X : Vector (array) of TF concentration
 %   H : Vector of inducer (hormone) concentration
+%   M : Transcriptional model to consider
+%       ('Mechanistic','HillxBasal','SimpleHill')
 %   p : Structure with the kinetic parameters
-%    .nM : "Converting" fluorescence a.u. to nM (e.g. 10)
-%    .mY : Related to basal synthesis of the naked promoter ([0,1])
-%    .kb : Related to efficiency rate of the transcription factor
-%    .nO : Promoter occupancy nonlinearity (Hill coefficient)
-%    .KO : Related to TF-promoter dissociation rate ([nM])
-%    .KX : Related to Hormone-TF (X:H) dissociation rate ([nM])
-%    .aX : Related to basal activity of free (non-active) TF ([0,1])
-%    .Im : Maximum synthesis rate given the gene & translocation rate
-%    .gY : Degradation/dilution rate of the output ([1/min])
 %   D : Measured output (data) matrix [length(H) x length(X)]
 %   s : Random number generator seed
 %   f : Structure (array) with information to fit parameters
@@ -38,7 +31,7 @@
 %   See also FN_SS_Mechanistic.m
 %   See also FN_FitError.m
 
-function [bestP,minE] = FN_FitMRW(X,H,p,D,s,f,I,ExID,printAll)
+function [bestP,minE] = FN_FitMRW(X,H,p,M,D,s,f,I,ExID,printAll)
     mrw.s = s;
     mrw.f = f;
     mrw.P = zeros(I,length(f));     % OUTPUT: Parameters.
@@ -57,7 +50,7 @@ function [bestP,minE] = FN_FitMRW(X,H,p,D,s,f,I,ExID,printAll)
                                     + log10(f(i).lim(1)));
         p.(f(i).par) = mrw.P(1,i);
     end
-    mrw.e(1)   = FN_FitError(X*p.nM,H,p,D*p.nM);
+    mrw.e(1)   = FN_FitError(X*p.nM,H,p,M,D*p.nM);
 
     % (3) Iterate:
     for j = 2:I
@@ -68,7 +61,7 @@ function [bestP,minE] = FN_FitMRW(X,H,p,D,s,f,I,ExID,printAll)
             p.(f(i).par) = min(max(f(i).lim(1),mrw.P(j,i)*(Mstep^r.Pe(j,i))),f(i).lim(2));
         end
         % Generate proposal:
-        myE = FN_FitError(X*p.nM,H,p,D*p.nM);
+        myE = FN_FitError(X*p.nM,H,p,M,D*p.nM);
         % If proposal is accepted, update system:
         if(r.tL(j) < exp(mrw.e(j)-myE))
             for i = 1:length(f)
