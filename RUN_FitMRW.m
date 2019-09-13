@@ -15,7 +15,7 @@ clear
 
 %% Inputs & conditions
 % Transcriptional model:
-M = 'Mechanistic';
+M = 'Mechanistic';      % Options: 'Mechanistic', 'HillxBasal', 'SimpleHill'
 % Data
 ExID = 'GEMc';	% Experiment (TF) to consider
     load('DATA_synTF.mat','xd');
