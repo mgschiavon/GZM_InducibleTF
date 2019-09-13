@@ -11,6 +11,7 @@
 %   X : Vector (array) of TF concentration
 %   H : Vector of inducer (hormone) concentration
 %   p : Structure with the kinetic parameters
+%    .nM : "Converting" fluorescence a.u. to nM (e.g. 10)
 %    .mY : Related to basal synthesis of the naked promoter ([0,1])
 %    .kb : Related to efficiency rate of the transcription factor
 %    .nO : Promoter occupancy nonlinearity (Hill coefficient)
@@ -56,7 +57,7 @@ function [bestP,minE] = FN_FitMRW(X,H,p,D,s,f,I,ExID,printAll)
                                     + log10(f(i).lim(1)));
         p.(f(i).par) = mrw.P(1,i);
     end
-    mrw.e(1)   = FN_FitError(X,H,p,D);
+    mrw.e(1)   = FN_FitError(X*p.nM,H,p,D*p.nM);
 
     % (3) Iterate:
     for j = 2:I
@@ -67,7 +68,7 @@ function [bestP,minE] = FN_FitMRW(X,H,p,D,s,f,I,ExID,printAll)
             p.(f(i).par) = min(max(f(i).lim(1),mrw.P(j,i)*(Mstep^r.Pe(j,i))),f(i).lim(2));
         end
         % Generate proposal:
-        myE = FN_FitError(X,H,p,D);
+        myE = FN_FitError(X*p.nM,H,p,D*p.nM);
         % If proposal is accepted, update system:
         if(r.tL(j) < exp(mrw.e(j)-myE))
             for i = 1:length(f)

@@ -43,7 +43,7 @@ function Ye = FN_SS_Mechanistic(X,H,p)
                 Xa = NaN;
             end
             Xo = OHFn(Xa+(p.aX*(XT-Xa)),p.nO,p.KO,0);
-            Ye(h,i) = OImx(Xo,p.Im,p.kb,p.mY)/p.gY;
+            Ye(h,i) = OImx(Xo,p.Im*p.nM,p.kb,p.mY)/p.gY;
         end
     end
     clear h i

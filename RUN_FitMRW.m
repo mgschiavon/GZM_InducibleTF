@@ -17,16 +17,17 @@ clear
 % Data
 ExID = 'GEMc';	% Experiment (TF) to consider
     load('DATA_synTF.mat','xd');
-    X = mean(xd.(ExID).X,1)*10;
+    X = mean(xd.(ExID).X,1);
     H = xd.(ExID).H;
-    D = xd.(ExID).Y*10;
+    D = xd.(ExID).Y;
     clear xd
 S = [1:1000];     % Random number seed(s) (1 per run)
 I = 20000;      % Iterations per fitting run
 printAll = 0;   % Flag for printing full random walk
 % Kinetic parameters:
+    p.nM = 10;
     p.mY = 0.997;
-    p.kb = 0.6;
+    p.kb = 1;
     p.nO = 1.6;
     p.KO = 0.99;
     p.KX = 15;
@@ -34,14 +35,19 @@ printAll = 0;   % Flag for printing full random walk
     p.gY = 0.01;
     p.Im = max(max(D))*p.gY;
 % Parameters to fit:
-    i = 1;
+    i = 0;
+    i = i + 1;
+    f(i).par = 'nM';
+    f(i).cov = 0.1;
+    f(i).lim = [1e-3,1000];
+    i = i + 1;
     f(i).par = 'mY';
     f(i).cov = 0.1;
     f(i).lim = [0.8,1];
-    i = i + 1;
-    f(i).par = 'kB';
-    f(i).cov = 0.1;
-    f(i).lim = [2e-6,2];
+%     i = i + 1;
+%     f(i).par = 'kB';
+%     f(i).cov = 0.1;
+%     f(i).lim = [2e-6,2];
     i = i + 1;
     f(i).par = 'nO';
     f(i).cov = 0.1;
@@ -73,12 +79,12 @@ for s = S
     bestP(s,:) = bP;
     minE(s) = mE;
     if(mod(s,10)==0)
-        save('TEMP_MRWs.mat');
+        save(cat(2,'TEMP_MRW_',ExID,'.mat'));
     end
 end
 clear s bP mE ans
 save(cat(2,'MRW_',ExID,'.mat'));
-delete('TEMP_MRWs.mat');
+delete(cat(2,'TEMP_MRW_',ExID,'.mat'));
 % load(cat(2,'MRW_',ExID,'.mat'));
 
 %% Figures
@@ -162,16 +168,16 @@ end
         for i = 1:length(f)
             p.(f(i).par) = bestP(b(ii),i);
         end
-        Ye = FN_SS_Mechanistic(X,H,p);
+        Ye = FN_SS_Mechanistic(X*p.nM,H,p);
         subplot(2,5,ii)
         hold on
         for i = 1:length(X)
             plot(Hi,Ye(:,i),'Color',C(i*10,:),'LineWidth',2)
-            plot(Hi,D(:,i),'Color',C(i*10,:),'LineStyle','none','Marker','o')
+            plot(Hi,D(:,i)*p.nM,'Color',C(i*10,:),'LineStyle','none','Marker','o')
         end
                 xlabel('Hormone')
                 ylabel('Output')
-                title(cat(2,'Error = ',num2str(FN_FitError(X,H,p,D))))
+                title(cat(2,'Error = ',num2str(FN_FitError(X*p.nM,H,p,D*p.nM))))
                 xlim([min(Hi)-0.5 max(Hi)+0.5])
                 set(gca,'YScale','log','YGrid','on',...
                     'XTick',Hi([length(H):-3:1]),'XTickLabel',H([length(H):-3:1]),...
