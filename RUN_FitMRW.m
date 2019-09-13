@@ -15,7 +15,7 @@ clear
 
 %% Inputs & conditions
 % Transcriptional model:
-M = 'Mechanistic';      % Options: 'Mechanistic', 'HillxBasal', 'SimpleHill'
+M = 'SimpleHill';      % Options: 'Mechanistic', 'HillxBasal', 'SimpleHill'
 % Data
 ExID = 'GEMc';	% Experiment (TF) to consider
     load('DATA_synTF.mat','xd');
@@ -28,14 +28,11 @@ I = 20000;      % Iterations per fitting run
 printAll = 0;   % Flag for printing full random walk
 % Kinetic parameters:
     p.nM = 10;
-    p.mY = 0.997;
-    p.kb = 1;
-    p.nO = 1.6;
-    p.KO = 0.99;
-    p.KX = 15;
-    p.aX = 0.00065;
-    p.gY = 0.01;
-    p.Im = max(max(D))*p.gY;
+    p.m  = 0.1;
+    p.a  = 0.003;
+    p.n  = 1.6;
+    p.K  = 1;
+    p.g  = 0.01;
 % Parameters to fit:
     i = 0;
     i = i + 1;
@@ -43,33 +40,21 @@ printAll = 0;   % Flag for printing full random walk
     f(i).cov = 0.1;
     f(i).lim = [1e-3,1000];
     i = i + 1;
-    f(i).par = 'mY';
+    f(i).par = 'm';
     f(i).cov = 0.1;
-    f(i).lim = [0.8,1];
-%     i = i + 1;
-%     f(i).par = 'kB';
-%     f(i).cov = 0.1;
-%     f(i).lim = [2e-6,2];
+    f(i).lim = [2e-6,2];
     i = i + 1;
-    f(i).par = 'nO';
+    f(i).par = 'a';
+    f(i).cov = 0.1;
+    f(i).lim = [2e-7,0.2];
+    i = i + 1;
+    f(i).par = 'n';
     f(i).cov = 0.1;
     f(i).lim = [1e-5,10];
     i = i + 1;
-    f(i).par = 'KO';
+    f(i).par = 'K';
     f(i).cov = 0.1;
     f(i).lim = [1e-4,100];
-    i = i + 1;
-    f(i).par = 'KX';
-    f(i).cov = 0.1;
-    f(i).lim = [1e-4,100];
-    i = i + 1;
-    f(i).par = 'aX';
-    f(i).cov = 0.1;
-    f(i).lim = [2e-7,0.2];
-%     i = i + 1;
-%     f(i).par = 'Im';
-%     f(i).cov = 0.1;
-%     f(i).lim = [2e-6,2];
     clear i
 
 %% Run fitting:
@@ -170,7 +155,15 @@ end
         for i = 1:length(f)
             p.(f(i).par) = bestP(b(ii),i);
         end
-        Ye = FN_SS_Mechanistic(X*p.nM,H,p);
+        if(strcmp(M,'SimpleHill'))
+            Ye = FN_SS_SimpleHill(X*p.nM,H,p);
+        elseif(strcmp(M,'HillxBasal'))
+            Ye = FN_SS_HillxBasal(X*p.nM,H,p);
+        elseif(strcmp(M,'Mechanistic'))
+            Ye = FN_SS_Mechanistic(X*p.nM,H,p);
+        else
+            'ERROR: Transcriptional model not defined. Options: SimpleHill, HillxBasal, Mechanistic.'
+        end
         subplot(2,5,ii)
         hold on
         for i = 1:length(X)
