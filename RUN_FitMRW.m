@@ -15,9 +15,9 @@ clear
 
 %% Inputs & conditions
 % Transcriptional model:
-M = 'SimpleHill';      % Options: 'Mechanistic', 'HillxBasal', 'SimpleHill'
+M = 'HillxBasal';      % Options: 'Mechanistic', 'HillxBasal', 'SimpleHill'
 % Data
-ExID = 'GEMc';	% Experiment (TF) to consider
+ExID = 'ZPMo';	% Experiment (TF) to consider
     load('DATA_synTF.mat','xd');
     X = mean(xd.(ExID).X,1);
     H = xd.(ExID).H;
@@ -27,18 +27,19 @@ S = [1:1000];     % Random number seed(s) (1 per run)
 I = 20000;      % Iterations per fitting run
 printAll = 0;   % Flag for printing full random walk
 % Kinetic parameters:
-    p.nM = 10;
+    p.nM = 0.4;
     p.m  = 0.1;
     p.a  = 0.003;
     p.n  = 1.6;
     p.K  = 1;
+    p.b  = 0.01;
     p.g  = 0.01;
 % Parameters to fit:
     i = 0;
-    i = i + 1;
-    f(i).par = 'nM';
-    f(i).cov = 0.1;
-    f(i).lim = [1e-3,1000];
+%     i = i + 1;
+%     f(i).par = 'nM';
+%     f(i).cov = 0.1;
+%     f(i).lim = [1e-3,1000];
     i = i + 1;
     f(i).par = 'm';
     f(i).cov = 0.1;
@@ -55,6 +56,10 @@ printAll = 0;   % Flag for printing full random walk
     f(i).par = 'K';
     f(i).cov = 0.1;
     f(i).lim = [1e-4,100];
+    i = i + 1;
+    f(i).par = 'b';
+    f(i).cov = 0.1;
+    f(i).lim = [2e-7,0.2];
     clear i
 
 %% Run fitting:
@@ -103,7 +108,7 @@ if(printAll)
             box on
     end
     clear s i a b
-    print(gcf,cat(2,'MRW_',ExID,'_Runs.png'),'-dpng','-r300')
+    print(gcf,cat(2,'MRW_',M,'_',ExID,'_Runs.png'),'-dpng','-r300')
 else
     fig = figure();
     fig.Units = 'inches';
@@ -122,7 +127,7 @@ else
             ylabel('Count')
             title(cat(2,'min(min(error)) = ',num2str(min(minE))))
             box on
-        print(gcf,cat(2,'MRW_',ExID,'_minE.png'),'-dpng','-r300')
+        print(gcf,cat(2,'MRW_',M,'_',ExID,'_minE.png'),'-dpng','-r300')
         
     fig = figure();
     fig.Units = 'inches';
@@ -142,7 +147,7 @@ else
                 box on
                 grid on
     end
-        print(gcf,cat(2,'MRW_',ExID,'_minExPar.png'),'-dpng','-r300')
+        print(gcf,cat(2,'MRW_',M,'_',ExID,'_minExPar.png'),'-dpng','-r300')
 end
     fig = figure();
     fig.Units = 'inches';
