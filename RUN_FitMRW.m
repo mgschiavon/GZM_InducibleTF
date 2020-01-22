@@ -15,9 +15,9 @@ clear
 
 %% Inputs & conditions
 % Transcriptional model:
-M = 'HillxBasal';      % Options: 'Mechanistic', 'HillxBasal', 'SimpleHill'
+M = 'Mechanistic';      % Options: 'Mechanistic', 'HillxBasal', 'SimpleHill'
 % Data
-ExID = 'ZPMo';	% Experiment (TF) to consider
+ExID = 'GEMo4';	% Experiment (TF) to consider
     load('DATA_synTF.mat','xd');
     X = mean(xd.(ExID).X,1);
     H = xd.(ExID).H;
@@ -28,12 +28,14 @@ I = 20000;      % Iterations per fitting run
 printAll = 0;   % Flag for printing full random walk
 % Kinetic parameters:
     p.nM = 0.4;
-    p.m  = 0.1;
+    p.KX = 15;
+    p.b  = 0.00065;
+    p.nO = 1.6;
+    p.KO = 0.99;
     p.a  = 0.003;
-    p.n  = 1.6;
-    p.K  = 1;
-    p.b  = 0.01;
-    p.g  = 0.01;
+    p.kb = 1;
+    p.gY = 0.01;
+    p.Im = max(max(D))*p.gY;
 % Parameters to fit:
     i = 0;
 %     i = i + 1;
@@ -41,25 +43,33 @@ printAll = 0;   % Flag for printing full random walk
 %     f(i).cov = 0.1;
 %     f(i).lim = [1e-3,1000];
     i = i + 1;
-    f(i).par = 'm';
-    f(i).cov = 0.1;
-    f(i).lim = [2e-6,2];
-    i = i + 1;
-    f(i).par = 'a';
-    f(i).cov = 0.1;
-    f(i).lim = [2e-7,0.2];
-    i = i + 1;
-    f(i).par = 'n';
-    f(i).cov = 0.1;
-    f(i).lim = [1e-5,10];
-    i = i + 1;
-    f(i).par = 'K';
+    f(i).par = 'KX';
     f(i).cov = 0.1;
     f(i).lim = [1e-4,100];
     i = i + 1;
     f(i).par = 'b';
     f(i).cov = 0.1;
     f(i).lim = [2e-7,0.2];
+    i = i + 1;
+    f(i).par = 'nO';
+    f(i).cov = 0.1;
+    f(i).lim = [1e-5,10];
+    i = i + 1;
+    f(i).par = 'KO';
+    f(i).cov = 0.1;
+    f(i).lim = [1e-4,100];
+    i = i + 1;
+    f(i).par = 'a';
+    f(i).cov = 0.1;
+    f(i).lim = [2e-7,0.2];
+%     i = i + 1;
+%     f(i).par = 'kB';
+%     f(i).cov = 0.1;
+%     f(i).lim = [2e-6,2];
+%     i = i + 1;
+%     f(i).par = 'Im';
+%     f(i).cov = 0.1;
+%     f(i).lim = [2e-6,2];
     clear i
 
 %% Run fitting:
