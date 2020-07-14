@@ -22,6 +22,7 @@
 %   See also FN_SS_SimpleHill.m
 %   See also FN_SS_HillxBasal.m
 %   See also FN_SS_Mechanistic.m
+%   See also FN_SS_Allosteric.m
 
 function Ef = FN_FitError(X,H,p,M,D)
     if(strcmp(M,'SimpleHill'))
@@ -30,6 +31,8 @@ function Ef = FN_FitError(X,H,p,M,D)
         Ye = FN_SS_HillxBasal(X,H,p);
     elseif(strcmp(M,'Mechanistic'))
         Ye = FN_SS_Mechanistic(X,H,p);
+    elseif(strcmp(M,'Allosteric'))
+        Ye = FN_SS_Allosteric(X,H,p);
     else
         'ERROR: Transcriptional model not defined. Options: SimpleHill, HillxBasal, Mechanistic.'
     end

@@ -8,6 +8,7 @@
 %   See also FN_SS_SimpleHill.m
 %   See also FN_SS_HillxBasal.m
 %   See also FN_SS_Mechanistic.m
+%   See also FN_SS_Allosteric.m
 %   See also FN_FitError.m
 %   See also FN_FitMRW.m
 
@@ -15,27 +16,26 @@ clear
 
 %% Inputs & conditions
 % Transcriptional model:
-M = 'Mechanistic';      % Options: 'Mechanistic', 'HillxBasal', 'SimpleHill'
+M = 'Allosteric';      % Options: 'Allosteric', 'Mechanistic', 'HillxBasal', 'SimpleHill'
 % Data
-ExID = 'GEMo4';	% Experiment (TF) to consider
+ExID = 'GEMc3';	% Experiment (TF) to consider
     load('DATA_synTF.mat','xd');
     X = mean(xd.(ExID).X,1);
     H = xd.(ExID).H;
     D = xd.(ExID).Y;
     clear xd
-S = [1:1000];     % Random number seed(s) (1 per run)
+S = [1:1000];   % Random number seed(s) (1 per run)
 I = 20000;      % Iterations per fitting run
 printAll = 0;   % Flag for printing full random walk
 % Kinetic parameters:
     p.nM = 0.4;
     p.KX = 15;
     p.b  = 0.00065;
-    p.nO = 1.6;
-    p.KO = 0.99;
+    p.m  = 0.1;
     p.a  = 0.003;
-    p.kb = 1;
-    p.gY = 0.01;
-    p.Im = max(max(D))*p.gY;
+    p.n  = 1.6;
+    p.K  = 1;
+    p.g  = 0.01;
 % Parameters to fit:
     i = 0;
 %     i = i + 1;
@@ -51,25 +51,21 @@ printAll = 0;   % Flag for printing full random walk
     f(i).cov = 0.1;
     f(i).lim = [2e-7,0.2];
     i = i + 1;
-    f(i).par = 'nO';
+    f(i).par = 'm';
     f(i).cov = 0.1;
-    f(i).lim = [1e-5,10];
-    i = i + 1;
-    f(i).par = 'KO';
-    f(i).cov = 0.1;
-    f(i).lim = [1e-4,100];
+    f(i).lim = [2e-6,2];
     i = i + 1;
     f(i).par = 'a';
     f(i).cov = 0.1;
     f(i).lim = [2e-7,0.2];
-%     i = i + 1;
-%     f(i).par = 'kB';
-%     f(i).cov = 0.1;
-%     f(i).lim = [2e-6,2];
-%     i = i + 1;
-%     f(i).par = 'Im';
-%     f(i).cov = 0.1;
-%     f(i).lim = [2e-6,2];
+    i = i + 1;
+    f(i).par = 'n';
+    f(i).cov = 0.1;
+    f(i).lim = [1e-5,10];
+    i = i + 1;
+    f(i).par = 'K';
+    f(i).cov = 0.1;
+    f(i).lim = [1e-4,100];
     clear i
 
 %% Run fitting:
@@ -176,8 +172,10 @@ end
             Ye = FN_SS_HillxBasal(X*p.nM,H,p);
         elseif(strcmp(M,'Mechanistic'))
             Ye = FN_SS_Mechanistic(X*p.nM,H,p);
+        elseif(strcmp(M,'Allosteric'))
+            Ye = FN_SS_Allosteric(X,H,p);
         else
-            'ERROR: Transcriptional model not defined. Options: SimpleHill, HillxBasal, Mechanistic.'
+            'ERROR: Transcriptional model not defined. Options: SimpleHill, HillxBasal, Mechanistic, Allosteric.'
         end
         subplot(2,5,ii)
         hold on

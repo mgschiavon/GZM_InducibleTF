@@ -29,6 +29,7 @@
 %   See also FN_SS_SimpleHill.m
 %   See also FN_SS_HillxBasal.m
 %   See also FN_SS_Mechanistic.m
+%   See also FN_SS_Allosteric.m
 %   See also FN_FitError.m
 
 function [bestP,minE] = FN_FitMRW(X,H,p,M,D,s,f,I,ExID,printAll)
