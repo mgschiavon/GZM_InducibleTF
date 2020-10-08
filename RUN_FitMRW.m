@@ -18,7 +18,7 @@ clear
 % Transcriptional model:
 M = 'Allosteric';      % Options: 'Allosteric', 'Mechanistic', 'HillxBasal', 'SimpleHill'
 % Data
-ExID = 'GEMc3';	% Experiment (TF) to consider
+ExID = 'GEMc2i';	% Experiment (TF) to consider
     load('DATA_synTF.mat','xd');
     X = mean(xd.(ExID).X,1);
     H = xd.(ExID).H;
@@ -45,7 +45,7 @@ printAll = 0;   % Flag for printing full random walk
     i = i + 1;
     f(i).par = 'KX';
     f(i).cov = 0.1;
-    f(i).lim = [1e-4,100];
+    f(i).lim = [1e-3,1000];
     i = i + 1;
     f(i).par = 'b';
     f(i).cov = 0.1;
@@ -173,7 +173,7 @@ end
         elseif(strcmp(M,'Mechanistic'))
             Ye = FN_SS_Mechanistic(X*p.nM,H,p);
         elseif(strcmp(M,'Allosteric'))
-            Ye = FN_SS_Allosteric(X,H,p);
+            Ye = FN_SS_Allosteric(X*p.nM,H,p);
         else
             'ERROR: Transcriptional model not defined. Options: SimpleHill, HillxBasal, Mechanistic, Allosteric.'
         end
