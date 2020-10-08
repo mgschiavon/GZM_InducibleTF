@@ -17,6 +17,10 @@ Code asociated to [Dods, Gómez-Schiavon et al. (2020)](https://doi.org/10.1101/
 
 'FN_SS_HillxBasal.m'
 
+![formula](https://render.githubusercontent.com/render/math?math=Y_{ss}\=f_{HB}(X_{ss},H)/\gamma)
+
+![formula](https://render.githubusercontent.com/render/math?math=f_{HB}(X_{ss},H)\=\mu_Y(\alpha%2B(1-\alpha)\frac{(X_{ss}H)^n}{(X_{ss}H)^n%2BK_D^n})%2B{\beta}X_{ss})
+
 ## MODEL: Mechanistic model
 
 'FN_SS_Mechanistic.m'
