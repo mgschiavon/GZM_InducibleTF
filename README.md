@@ -25,6 +25,16 @@ Code asociated to [Dods, Gómez-Schiavon et al. (2020)](https://doi.org/10.1101/
 
 'FN_SS_Mechanistic.m'
 
+![formula](https://render.githubusercontent.com/render/math?math=Y_{ss}\=f_{M}(X_{ss},H)/\gamma)
+
+![formula](https://render.githubusercontent.com/render/math?math=f_{M}(X_{ss},H)\=\mu_Y(1-(1-\alpha)e^{(-{\beta}X_O(X_{ss},H)\/\mu_Y)}))
+
+![formula](https://render.githubusercontent.com/render/math?math=X_O(X_{ss},H)\=\frac{(X_a(X_{ss},H)%2B{\beta}(X_{ss}-X_a(X_{ss},H)))^n}{(X_a(X_{ss},H)%2B{\beta}(X_{ss}-X_a(X_{ss},H)))^n{%2B}K^n})
+
+![formula](https://render.githubusercontent.com/render/math?math=0\=X_a(X_{ss},H)^2-(H%2BX_{ss}%2BK_X)X_a(X_{ss},H)%2B(X_{ss}H))
+
+![formula](https://render.githubusercontent.com/render/math?math=X_a(X_{ss},H){&lt;}X_{ss})
+
 ## MODEL: Expanded Hill model
 
 \* NOTE: Also refered as _allosteric_
