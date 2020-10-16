@@ -3,7 +3,7 @@
 # GZM_InducibleTF
 Modeling inducible transcriptional regulators, GEM &amp; ZPM, dose-response.
 
-Code asociated to [Dods, Gómez-Schiavon et al. (2020)](https://doi.org/10.1101/2020.05.30.122077).
+Code asociated to [Dods, Gómez-Schiavon _et al._ (2020; _bioRxiv_)](https://doi.org/10.1101/2020.05.30.122077).
 
 ## MODEL: Simple Hill model
 
