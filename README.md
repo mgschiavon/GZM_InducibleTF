@@ -5,9 +5,16 @@ Modeling inducible transcriptional regulators, GEM &amp; ZPM, dose-response.
 
 Code asociated to [Dods, Gómez-Schiavon _et al._ (2020; _bioRxiv_)](https://doi.org/10.1101/2020.05.30.122077).
 
+## Main files:
+- `FN_SS_MODELNAME.m`: Finding steady state solution the output (![formula](https://render.githubusercontent.com/render/math?math=Y_{ss})) for the specific model (e.g. `FN_SS_SimpleHill.m` for simple hill model; see options below) given a set of biophysical paramers (e.g. ![formula](https://render.githubusercontent.com/render/math?math=\mu_Y,\gamma)), inducer concentration (![formula](https://render.githubusercontent.com/render/math?math=H)), and total transcription factor concentration (![formula](https://render.githubusercontent.com/render/math?math=X_{ss})).
+- `FN_FitError.m`: Calculate the sum of square errors between model's steady state (![formula](https://render.githubusercontent.com/render/math?math=Y_{ss})) and observed data (![formula](https://render.githubusercontent.com/render/math?math=D)), given a set of biophysical paramers (e.g. ![formula](https://render.githubusercontent.com/render/math?math=\mu_Y,\gamma)), inducer concentration (![formula](https://render.githubusercontent.com/render/math?math=H)), and total transcription factor concentration (![formula](https://render.githubusercontent.com/render/math?math=X_{ss})).
+- `FN_FitMRW.m`: Find the set of parameters that best fit the data.
+- `RUN_FitMRW.m`: Determine model, conditions, and parameters to be fitted, and call `FN_FitMRW.m`.
+
+
 ## MODEL: Simple Hill model
 
-'FN_SS_SimpleHill.m'
+`FN_SS_SimpleHill.m`
 
 ![formula](https://render.githubusercontent.com/render/math?math=Y_{ss}\=f_{SH}(X_{ss},H)/\gamma)
 
@@ -15,7 +22,7 @@ Code asociated to [Dods, Gómez-Schiavon _et al._ (2020; _bioRxiv_)](https://doi
 
 ## MODEL: Hill + Basal model
 
-'FN_SS_HillxBasal.m'
+`FN_SS_HillxBasal.m`
 
 ![formula](https://render.githubusercontent.com/render/math?math=Y_{ss}\=f_{HB}(X_{ss},H)/\gamma)
 
@@ -23,7 +30,7 @@ Code asociated to [Dods, Gómez-Schiavon _et al._ (2020; _bioRxiv_)](https://doi
 
 ## MODEL: Mechanistic model
 
-'FN_SS_Mechanistic.m'
+`FN_SS_Mechanistic.m`
 
 ![formula](https://render.githubusercontent.com/render/math?math=Y_{ss}\=f_{M}(X_{ss},H)/\gamma)
 
@@ -39,7 +46,7 @@ Code asociated to [Dods, Gómez-Schiavon _et al._ (2020; _bioRxiv_)](https://doi
 
 \* NOTE: Also refered as _allosteric_
 
-'FN_SS_Allosteric.m'
+`FN_SS_Allosteric.m`
 
 ![formula](https://render.githubusercontent.com/render/math?math=Y_{ss}\=f_{EH}(X_{ss},H)/\gamma)
 
