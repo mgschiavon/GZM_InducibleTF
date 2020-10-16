@@ -40,3 +40,11 @@ Code asociated to [Dods, Gómez-Schiavon et al. (2020)](https://doi.org/10.1101/
 \* NOTE: Also refered as _allosteric_
 
 'FN_SS_Allosteric.m'
+
+![formula](https://render.githubusercontent.com/render/math?math=Y_{ss}\=f_{EH}(X_{ss},H)/\gamma)
+
+![formula](https://render.githubusercontent.com/render/math?math=f_{EH}(X_{ss},H)\=\mu_Y(\alpha%2B(1-\alpha)\frac{(X_a(X_{ss},H)%2B{\beta}(X_{ss}-X_a(X_{ss},H)))^n}{(X_a(X_{ss},H)%2B{\beta}(X_{ss}-X_a(X_{ss},H)))^n%2BK_D^n}))
+
+![formula](https://render.githubusercontent.com/render/math?math=0\=X_a(X_{ss},H)^2-(H%2BX_{ss}%2BK_X)X_a(X_{ss},H)%2B(X_{ss}H))
+
+![formula](https://render.githubusercontent.com/render/math?math=X_a(X_{ss},H){&lt;}X_{ss})
