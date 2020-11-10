@@ -1,9 +1,11 @@
-[![](https://img.shields.io/badge/DOI-10.1101%2F2020.05.30.122077-blue.svg)](https://doi.org/10.1101/2020.05.30.122077)
+[![](https://img.shields.io/badge/DOI-10.1021%2Facssynbio.0c00288-blue.svg)](https://doi.org/10.1021/acssynbio.0c00288)
+
+Pre-print: [![](https://img.shields.io/badge/DOI-10.1101%2F2020.05.30.122077-blue.svg)](https://doi.org/10.1101/2020.05.30.122077)
 
 # GZM_InducibleTF
 Modeling inducible transcriptional regulators, GEM &amp; ZPM, dose-response.
 
-Code asociated to [Dods, Gómez-Schiavon _et al._ (2020; _bioRxiv_)](https://doi.org/10.1101/2020.05.30.122077).
+Code asociated to [Gómez-Schiavon, Dods_et al. (2020; _ACS Synthetic Biology_)](https://doi.org/10.1021/acssynbio.0c00288) and [Dods, Gómez-Schiavon _et al._ (2020; _bioRxiv_)](https://doi.org/10.1101/2020.05.30.122077).
 
 ## Main files:
 - `FN_SS_MODELNAME.m`: Finding steady state solution the output (![formula](https://render.githubusercontent.com/render/math?math=Y_{ss})) for the specific model (e.g. `FN_SS_SimpleHill.m` for simple hill model; see options below) given a set of biophysical paramers (e.g. ![formula](https://render.githubusercontent.com/render/math?math=\mu_Y,\gamma)), inducer concentration (![formula](https://render.githubusercontent.com/render/math?math=H)), and total transcription factor concentration (![formula](https://render.githubusercontent.com/render/math?math=X_{ss})).
